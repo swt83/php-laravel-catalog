@@ -2,7 +2,7 @@
 
 A Laravel PHP package for caching API responses.
 
-Since many API charge by the request, and to speed up response times, it's a good idea to cache API responses.  This package creates a database and automatically handles the caching on your behalf.
+Since many APIs charge by the request, and to speed up response times, it's a good idea to cache API responses.  This package creates a database and automatically handles the caching on your behalf, for any API that you might use.
 
 ## Versions
 
@@ -38,7 +38,7 @@ $ php artisan migrate
 
 ## Usage
 
-Call the ``lookup`` method and pass an age limit and a closure:
+Call the ``lookup`` method and pass a closure (and optionally an age limit):
 
 ```php
 $response = Catalog::lookup(function()
