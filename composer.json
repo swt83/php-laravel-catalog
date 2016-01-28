@@ -1,7 +1,7 @@
 {
-    "name": "vendor/package",
+    "name": "travis/catalog",
     "description": "",
-    "homepage": "",
+    "homepage": "https://github.com/swt83/php-laravel-catalog",
     "license": "MIT",
     "authors": [
         {
@@ -12,19 +12,17 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": ""
+            "url": "git@github.com:swt83/php-date.git"
         }
     ],
     "require": {
         "php": ">=5.3.0",
-        "illuminate/support": "4.1.*"
+        "jeremeamia/superclosure": "~2.0",
+        "travis/date": "*"
     },
     "autoload": {
-        "classmap": [
-            "src/commands"
-        ],
         "psr-0": {
-            "Vendor\\": "src/"
+            "Travis\\": "src/models/"
         }
     },
     "minimum-stability": "dev"
