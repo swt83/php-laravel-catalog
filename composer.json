@@ -1,6 +1,6 @@
 {
     "name": "travis/catalog",
-    "description": "",
+    "description": "A Laravel PHP package for caching API responses.",
     "homepage": "https://github.com/swt83/php-laravel-catalog",
     "license": "MIT",
     "authors": [
