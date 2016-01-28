@@ -18,7 +18,7 @@ class Catalog
 	public static function lookup($closure, $age_limit = null)
 	{
 		// calculate hash
-		$hash = static::serialize($closure);
+		$hash = static::hash($closure);
 
 		// check database
 		$check = Model::where('hash', '=', $hash)
@@ -30,7 +30,7 @@ class Catalog
 			// if age limit...
 			if ($age_limit)
 			{
-				// calculate expiration date
+				// make date object
 				$expires_at = Date::forge($age_limit);
 
 				// catch date error...
@@ -71,7 +71,7 @@ class Catalog
 		$response = $closure();
 
 		// calculate hash
-		$hash = static::serialize($closure);
+		$hash = static::hash($closure);
 
 		// save record
 		Model::create([
@@ -89,15 +89,15 @@ class Catalog
 	 * @param	closure	$closure
 	 * @return	string
 	 */
-	protected static function serialize($closure)
+	protected static function hash($closure)
 	{
 		// serializer
         $serializer = new Serializer();
 
         // serialize
-        $serialized = $serializer->serialize($closure);
+        $string = $serializer->serialize($closure);
 
         // return
-        return md5($serialized);
+        return md5($string);
 	}
 }
