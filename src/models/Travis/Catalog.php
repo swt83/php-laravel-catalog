@@ -31,7 +31,7 @@ class Catalog
 			if ($age_limit)
 			{
 				// make date object
-				$expires_at = Date::forge($age_limit);
+				$expires_at = Date::make()->remake('-'.$age_limit);
 
 				// catch date error...
 				if (!$expires_at->time()) trigger_error('Invalid age limit.');
