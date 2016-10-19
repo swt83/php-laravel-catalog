@@ -47,7 +47,7 @@ $response = Catalog::lookup(function()
 		'param1' => 'foo',
 		'param2' => 'bar',
 	]);
-}, '1 year ago');
+}, '1 year');
 ```
 
 This will check the database for a stored response of the exact request.  If no stored responses are found, it will make the API request and store the response for future reference.
