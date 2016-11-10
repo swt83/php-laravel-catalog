@@ -40,15 +40,28 @@ class Catalog
 				if ($check->created_at < $expires_at->format('%F %X'))
 				{
 					// delete
-					$check->delete();
+					Model::where('hash', '=', $hash)->delete();
 
 					// return new lookup
 					return static::run($closure);
 				}
 			}
 
+			// load result (suppress error)
+			$result = @unserialize(base64_decode($check->response));
+
+			// if false (something went wrong)
+			if (!$result)
+			{
+				// delete
+				Model::where('hash', '=', $hash)->delete();
+
+				// rerun
+				return static::run($closure);
+			}
+
 			// return
-			return unserialize($check->response);
+			return $result;
 		}
 
 		// else if NOT found...
@@ -76,7 +89,7 @@ class Catalog
 		// save record
 		Model::create([
 			'hash' => $hash,
-			'response' => serialize($response),
+			'response' => base64_encode(serialize($response)),
 		]);
 
 		// return
