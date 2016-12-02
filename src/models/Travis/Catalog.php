@@ -11,11 +11,12 @@ class Catalog
 	/**
 	 * Return a cached API response, or a new one.
 	 *
+	 * @param	string	$name
 	 * @param	closure	$closure
 	 * @param	string	$age_limit
 	 * @return	array
 	 */
-	public static function lookup($closure, $age_limit = null)
+	public static function lookup($name, $closure, $age_limit = null)
 	{
 		// calculate hash
 		$hash = static::hash($closure);
@@ -43,12 +44,12 @@ class Catalog
 					Model::where('hash', '=', $hash)->delete();
 
 					// return new lookup
-					return static::run($closure);
+					return static::run($name, $closure);
 				}
 			}
 
 			// load result (suppress error)
-			$result = @unserialize(base64_decode($check->response));
+			$result = json_decode($check->response);
 
 			// if false (something went wrong)
 			if (!$result)
@@ -57,7 +58,7 @@ class Catalog
 				Model::where('hash', '=', $hash)->delete();
 
 				// rerun
-				return static::run($closure);
+				return static::run($name, $closure);
 			}
 
 			// return
@@ -68,17 +69,18 @@ class Catalog
 		else
 		{
 			// return lookup
-			return static::run($closure);
+			return static::run($name, $closure);
 		}
 	}
 
 	/**
 	 * Return the response of an actual API query.
 	 *
+	 * @param	string	$name
 	 * @param	closure	$closure
 	 * @return	array
 	 */
-	protected static function run($closure)
+	protected static function run($name, $closure)
 	{
 		// run closure
 		$response = $closure();
@@ -89,7 +91,8 @@ class Catalog
 		// save record
 		Model::create([
 			'hash' => $hash,
-			'response' => base64_encode(serialize($response)),
+			'name' => $name,
+			'response' => json_encode($response),
 		]);
 
 		// return

@@ -38,10 +38,10 @@ $ php artisan migrate
 
 ## Usage
 
-Call the ``lookup`` method and pass a closure (and optionally an age limit):
+Call the ``lookup`` method, give the lookup a name, pass a closure, and optionally provide a cache lifespan:
 
 ```php
-$response = Catalog::lookup(function()
+$response = Catalog::lookup('myapi', function()
 {
 	return MyAPI::run([
 		'param1' => 'foo',
@@ -50,6 +50,4 @@ $response = Catalog::lookup(function()
 }, '1 year');
 ```
 
-This will check the database for a stored response of the exact request.  If no stored responses are found, it will make the API request and store the response for future reference.
-
-You can also pass an optional paramter of an age limit.  This value can be anything that [``strtotime()``](http://php.net/manual/en/function.strtotime.php) can recognize.  If an age limit is passed, any stored responses found older than the limit will be deleted.
+The cache lifespan value should be something that [``strtotime()``](http://php.net/manual/en/function.strtotime.php) can recognize.
