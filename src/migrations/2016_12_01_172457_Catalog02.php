@@ -12,7 +12,7 @@ class Catalog02 extends Migration
      */
     public function up()
     {
-        Schema::connection('catalog')->create('catalog', function($table)
+        Schema::connection('catalog')->table('catalog', function($table)
         {
             $table->string('name', 100);
             #
@@ -27,6 +27,9 @@ class Catalog02 extends Migration
      */
     public function down()
     {
-
+        Schema::connection('catalog')->table('catalog', function($table)
+        {
+            $table->dropColumn('name');
+        });
     }
 }

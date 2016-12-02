@@ -50,4 +50,4 @@ $response = Catalog::lookup('myapi', function()
 }, '1 year');
 ```
 
-The cache lifespan value should be something that [``strtotime()``](http://php.net/manual/en/function.strtotime.php) can recognize.
+The name you provide doesn't need to be unique, rather it should be a name to describe the type of API call being made (this is to allow easy editing of the stored database records, if you needed to purge something).  The cache lifespan value should be something that [``strtotime()``](http://php.net/manual/en/function.strtotime.php) can recognize.
