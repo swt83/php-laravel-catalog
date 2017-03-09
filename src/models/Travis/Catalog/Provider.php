@@ -20,6 +20,9 @@ class Provider extends ServiceProvider
         $this->publishes([
             $dir.'migrations' => database_path('migrations')
         ], 'migrations');
+
+        // include routes
+        include $dir.'routes.php';
     }
 
     /**

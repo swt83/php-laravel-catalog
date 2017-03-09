@@ -4,6 +4,7 @@ namespace Travis;
 
 use SuperClosure\Serializer;
 use Travis\Catalog\Model;
+use Travis\Catalog\API;
 use Travis\Date;
 
 class Catalog
@@ -16,14 +17,13 @@ class Catalog
 	 * @param	string	$age_limit
 	 * @return	array
 	 */
-	public static function lookup($name, $closure, $age_limit = null)
+	public static function lookup($name, $closure, $age_limit = null, $endpoint = null)
 	{
 		// calculate hash
 		$hash = static::hash($closure);
 
-		// check database
-		$check = Model::where('hash', '=', $hash)
-			->first();
+		// load from storage
+		$check = static::get($hash, $endpoint);
 
 		// if found...
 		if ($check)
@@ -35,16 +35,16 @@ class Catalog
 				$expires_at = Date::make()->remake('-'.$age_limit);
 
 				// catch date error...
-				if (!$expires_at->time()) trigger_error('Invalid age limit.');
+				if (!$expires_at->time()) throw new \Exception('Invalid age limit.');
 
 				// if too old...
 				if ($check->created_at < $expires_at->format('%F %X'))
 				{
 					// delete
-					Model::where('hash', '=', $hash)->delete();
+					static::unset($hash, $endpoint);
 
 					// return new lookup
-					return static::run($name, $closure);
+					return static::run($name, $closure, $hash, $endpoint);
 				}
 			}
 
@@ -55,10 +55,10 @@ class Catalog
 			if (!$result)
 			{
 				// delete
-				Model::where('hash', '=', $hash)->delete();
+				static::unset($hash, $endpoint);
 
 				// rerun
-				return static::run($name, $closure);
+				return static::run($name, $closure, $hash, $endpoint);
 			}
 
 			// return
@@ -69,7 +69,7 @@ class Catalog
 		else
 		{
 			// return lookup
-			return static::run($name, $closure);
+			return static::run($name, $closure, $hash, $endpoint);
 		}
 	}
 
@@ -78,22 +78,17 @@ class Catalog
 	 *
 	 * @param	string	$name
 	 * @param	closure	$closure
+	 * @param	string	$hash
+	 * @param	string	$endpoint
 	 * @return	array
 	 */
-	protected static function run($name, $closure)
+	protected static function run($name, $closure, $hash, $endpoint)
 	{
 		// run closure
 		$response = $closure();
 
-		// calculate hash
-		$hash = static::hash($closure);
-
 		// save record
-		Model::create([
-			'hash' => $hash,
-			'name' => $name,
-			'response' => json_encode($response),
-		]);
+		static::set($name, $hash, $respose, $endpoint);
 
 		// return
 		return $response;
@@ -115,5 +110,81 @@ class Catalog
 
         // return
         return md5($string);
+	}
+
+	/**
+	 * Get the stored response.
+	 *
+	 * @param	string	$hash
+	 * @param	string	$endpoint
+	 * @return	object
+	 */
+	protected static function get($hash, $endpoint)
+	{
+		// if using remote api...
+		if ($endpoint)
+		{
+			API::get($hash, $endpoint);
+		}
+
+		// else if using database...
+		else
+		{
+			$check = Model::where('hash', '=', $hash)
+				->first();
+		}
+
+		// return
+		return $check;
+	}
+
+	/**
+	 * Delete a stored response.
+	 *
+	 * @param	string	$hash
+	 * @param	string	$endpoint
+	 * @return	void
+	 */
+	protected static function unset($hash, $endpoint)
+	{
+		// if using remote api...
+		if ($endpoint)
+		{
+			API::unset($hash, $endpoint);
+		}
+
+		// else if using database...
+		else
+		{
+			Model::where('hash', '=', $hash)->delete();
+		}
+	}
+
+	/**
+	 * Save a calculated response.
+	 *
+	 * @param	string	$name
+	 * @param	string	$hash
+	 * @param	mixed	$response
+	 * @param	string	$endpoint
+	 * @return	object
+	 */
+	protected static function set($name, $hash, $respose, $endpoint)
+	{
+		// if using remote api...
+		if ($endpoint)
+		{
+			API::set($name, $hash, $response, $endpoint);
+		}
+
+		// else if using database...
+		else
+		{
+			Model::create([
+				'name' => $name,
+				'hash' => $hash,
+				'response' => json_encode($response),
+			]);
+		}
 	}
 }
