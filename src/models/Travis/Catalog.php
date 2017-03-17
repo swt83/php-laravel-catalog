@@ -120,7 +120,7 @@ class Catalog
 	 * @param	string	$endpoint
 	 * @return	object
 	 */
-	protected static function get($hash, $endpoint = null)
+	public static function get($hash, $endpoint = null)
 	{
 		// if using remote api...
 		if ($endpoint)
@@ -145,7 +145,7 @@ class Catalog
 	 * @param	string	$endpoint
 	 * @return	void
 	 */
-	protected static function unset($hash, $endpoint = null)
+	public static function unset($hash, $endpoint = null)
 	{
 		// if using remote api...
 		if ($endpoint)
@@ -169,7 +169,7 @@ class Catalog
 	 * @param	string	$endpoint
 	 * @return	object
 	 */
-	protected static function set($name, $hash, $response, $endpoint = null)
+	public static function set($name, $hash, $response, $endpoint = null)
 	{
 		// if using remote api...
 		if ($endpoint)
