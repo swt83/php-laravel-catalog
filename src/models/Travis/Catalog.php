@@ -15,6 +15,7 @@ class Catalog
 	 * @param	string	$name
 	 * @param	closure	$closure
 	 * @param	string	$age_limit
+	 * @param	string	$endpoint
 	 * @return	array
 	 */
 	public static function lookup($name, $closure, $age_limit = null, $endpoint = null)
@@ -88,7 +89,7 @@ class Catalog
 		$response = $closure();
 
 		// save record
-		static::set($name, $hash, $respose, $endpoint);
+		static::set($name, $hash, $response, $endpoint);
 
 		// return
 		return $response;
@@ -119,19 +120,18 @@ class Catalog
 	 * @param	string	$endpoint
 	 * @return	object
 	 */
-	protected static function get($hash, $endpoint)
+	protected static function get($hash, $endpoint = null)
 	{
 		// if using remote api...
 		if ($endpoint)
 		{
-			API::get($hash, $endpoint);
+			$check = API::get($hash, $endpoint);
 		}
 
 		// else if using database...
 		else
 		{
-			$check = Model::where('hash', '=', $hash)
-				->first();
+			$check = Model::where('hash', '=', $hash)->first();
 		}
 
 		// return
@@ -145,7 +145,7 @@ class Catalog
 	 * @param	string	$endpoint
 	 * @return	void
 	 */
-	protected static function unset($hash, $endpoint)
+	protected static function unset($hash, $endpoint = null)
 	{
 		// if using remote api...
 		if ($endpoint)
@@ -169,7 +169,7 @@ class Catalog
 	 * @param	string	$endpoint
 	 * @return	object
 	 */
-	protected static function set($name, $hash, $respose, $endpoint)
+	protected static function set($name, $hash, $response, $endpoint = null)
 	{
 		// if using remote api...
 		if ($endpoint)

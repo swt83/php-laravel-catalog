@@ -1,13 +1,9 @@
 <?php
 
-use Travis\Catalog;
+use Travis\Catalog\API;
 
-Route::get('librarian', function()
+Route::post('librarian/{method}', function($method)
 {
-
-});
-
-Route::post('librarian', function()
-{
-
+	// return
+	return API::receive($method, Request::input());
 });

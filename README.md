@@ -48,9 +48,9 @@ $response = Catalog::lookup('myapi', function()
 
 The name you provide doesn't need to be unique, rather it should be a name to describe the type of API call being made (this is to allow easy editing of the stored database records, if you needed to purge something).  The cache lifespan value should be something that [``strtotime()``](http://php.net/manual/en/function.strtotime.php) can recognize.
 
-## Library
+## Librarian
 
-This package can also be used to host a central storage location that can be referenced via API.  This lets you can have multiple apps referencing the cached API responses of a single database.
+This package can also be used to host a central storage location that can be referenced via API.  This lets you can have multiple remote apps referencing cached API responses in a single database.
 
 ```
 $response = Catalog::lookup('myapi', function()
@@ -59,5 +59,7 @@ $response = Catalog::lookup('myapi', function()
 		'param1' => 'foo',
 		'param2' => 'bar',
 	]);
-}, '1 year', 'https://myapp.com/librarian'); // notice the URL to the API of your central app
+}, '1 year', 'https://myapp.com/librarian'); // notice new argument pointing to the API endpoint
 ```
+
+The Laravel provider in this package automatically creates the route for the API endpoint.  Just point your remote apps to that endpoint and you should be good to go.
