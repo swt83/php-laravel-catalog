@@ -150,7 +150,7 @@ class Catalog
 		// if using remote api...
 		if ($endpoint)
 		{
-			API::unset($hash, $endpoint);
+			#API::unset($hash, $endpoint);
 		}
 
 		// else if using database...
@@ -174,7 +174,7 @@ class Catalog
 		// if using remote api...
 		if ($endpoint)
 		{
-			API::set($name, $hash, $response, $endpoint);
+			#API::set($name, $hash, $response, $endpoint);
 		}
 
 		// else if using database...

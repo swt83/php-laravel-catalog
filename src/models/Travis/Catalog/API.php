@@ -104,9 +104,6 @@ class API
 		// make url
 		$endpoint = $endpoint.'/'.$method;
 
-		// make payload
-		$payload = json_encode($input);
-
 		// make request
 		$ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $endpoint);
@@ -115,7 +112,7 @@ class API
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $input);
         $response = curl_exec($ch);
 
         // catch error...
