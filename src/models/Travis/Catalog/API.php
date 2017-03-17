@@ -27,7 +27,7 @@ class API
 			switch ($method)
 			{
 				case 'get':
-					$data = Catalog::get($input['hash']);
+					$data = Catalog::get($input->hash);
 					if (!$data)
 					{
 						$is_success = false;
@@ -35,10 +35,10 @@ class API
 					}
 					break;
 				case 'unset':
-					Catalog::unset($input['hash']);
+					Catalog::unset($input->hash);
 					break;
 				case 'set':
-					Catalog::set($input['name'], $input['hash'], $input['response']);
+					Catalog::set($input->name, $input->hash, $input->response);
 					break;
 				default:
 					$is_success = false;
@@ -97,7 +97,7 @@ class API
 	 */
 	public static function set($name, $hash, $response, $endpoint)
 	{
-		static::request($endpoint, 'set', ['name' => $name, 'hash' => $hash, 'response' => json_encode($response)]);
+		static::request($endpoint, 'set', ['name' => $name, 'hash' => $hash, 'response' => $response]);
 	}
 
 	/**
@@ -121,7 +121,7 @@ class API
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $input);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, ['input' => json_encode($input)]);
         $response = curl_exec($ch);
 
         // catch error...
