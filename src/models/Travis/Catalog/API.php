@@ -38,7 +38,7 @@ class API
 					Catalog::unset($input['hash']);
 					break;
 				case 'set':
-					Catalog::get($input['name'], $input['hash'], json_decode($input['response']));
+					Catalog::set($input['name'], $input['hash'], $input['response']);
 					break;
 				default:
 					$is_success = false;
