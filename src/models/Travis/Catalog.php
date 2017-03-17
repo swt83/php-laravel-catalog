@@ -86,7 +86,7 @@ class Catalog
 	protected static function run($name, $closure, $hash, $endpoint)
 	{
 		// run closure
-		$response = 'hi'; //$closure();
+		$response = $closure();
 
 		// save record
 		static::set($name, $hash, $response, $endpoint);
