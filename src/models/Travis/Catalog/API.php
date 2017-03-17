@@ -28,13 +28,13 @@ class API
 			switch ($method)
 			{
 				case 'get':
-					Catalog::get($input['hash']);
+					$data = Catalog::get($input['hash']);
 					break;
 				case 'unset':
-					Catalog::unset($input['hash']);
+					$data = Catalog::unset($input['hash']);
 					break;
 				case 'set':
-					Catalog::get($input['name'], $input['hash'], $input['response']);
+					$data = Catalog::get($input['name'], $input['hash'], $input['response']);
 					break;
 				default:
 					$is_success = false;
@@ -51,7 +51,7 @@ class API
 		}
 
 		// return
-		return request(json_encode(['is_success' => $is_success, 'data' => $data]));
+		return json_encode(['is_success' => $is_success, 'data' => $data]);
 	}
 
 	/**
