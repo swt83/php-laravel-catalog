@@ -51,7 +51,7 @@ class API
 		}
 
 		// return
-		return request(json_encode(['is_success' => $is_error, 'data' => $data]), $is_success ? 200 : 422);
+		return request(json_encode(['is_success' => $is_success, 'data' => $data]), $is_success ? 200 : 422);
 	}
 
 	/**
