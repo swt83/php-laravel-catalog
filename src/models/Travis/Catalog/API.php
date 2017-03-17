@@ -38,7 +38,7 @@ class API
 					Catalog::unset($input['hash']);
 					break;
 				case 'set':
-					Catalog::get($input['name'], $input['hash'], $input['response']);
+					Catalog::get($input['name'], $input['hash'], json_decode($input['response']));
 					break;
 				default:
 					$is_success = false;
@@ -67,7 +67,11 @@ class API
 	 */
 	public static function get($hash, $endpoint)
 	{
-		return static::send($endpoint, 'get', ['hash' => $hash]);
+		// request
+		$response = static::request($endpoint, 'get', ['hash' => $hash]);
+
+		// return
+		return $response->is_success ? $response->data : null;
 	}
 
 	/**
@@ -79,20 +83,21 @@ class API
 	 */
 	public static function unset($hash, $endpoint)
 	{
-		return static::send($endpoint, 'unset', ['hash' => $hash]);
+		static::request($endpoint, 'unset', ['hash' => $hash]);
 	}
 
 	/**
 	 * Save a calculated response.
 	 *
+	 * @param	string	$name
 	 * @param	string	$hash
 	 * @param	mixed	$response
 	 * @param	string	$endpoint
 	 * @return	object
 	 */
-	public static function set($hash, $response, $endpoint)
+	public static function set($name, $hash, $response, $endpoint)
 	{
-		return static::send($endpoint, 'set', ['hash' => $hash, 'response' => $response]);
+		static::request($endpoint, 'set', ['name' => $name, 'hash' => $hash, 'response' => json_encode($response)]);
 	}
 
 	/**
@@ -103,7 +108,7 @@ class API
 	 * @param	array	$input
 	 * @return	mixed
 	 */
-	protected static function send($endpoint, $method, $input)
+	protected static function request($endpoint, $method, $input)
 	{
 		// make url
 		$endpoint = $endpoint.'/'.$method;
