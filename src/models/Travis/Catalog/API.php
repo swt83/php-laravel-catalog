@@ -15,10 +15,9 @@ class API
 	 */
 	public static function receive($method, $input)
 	{
-		// flag
-		$is_success = true;
-
 		// init
+		$is_success = true;
+		$message = null;
 		$data = null;
 
 		// attempt to process...
@@ -29,16 +28,21 @@ class API
 			{
 				case 'get':
 					$data = Catalog::get($input['hash']);
+					if (!$data)
+					{
+						$is_success = false;
+						$message = 'Record not found.';
+					}
 					break;
 				case 'unset':
-					$data = Catalog::unset($input['hash']);
+					Catalog::unset($input['hash']);
 					break;
 				case 'set':
-					$data = Catalog::get($input['name'], $input['hash'], $input['response']);
+					Catalog::get($input['name'], $input['hash'], $input['response']);
 					break;
 				default:
 					$is_success = false;
-					$data = 'Invalid request.';
+					$message = 'Invalid request.';
 					break;
 			}
 		}
@@ -47,11 +51,11 @@ class API
 		catch (\Exception $e)
 		{
 			$is_success = false;
-			$data = $e->getMessage();
+			$message = $e->getMessage();
 		}
 
 		// return
-		return json_encode(['is_success' => $is_success, 'data' => $data]);
+		return json_encode(['is_success' => $is_success, 'message' => $message, 'data' => $data]);
 	}
 
 	/**
