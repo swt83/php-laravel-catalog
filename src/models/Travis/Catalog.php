@@ -22,7 +22,7 @@ class Catalog
 	public static function lookup($name, $closure, $age_limit = null, $id = null, $endpoint = null)
 	{
 		// calculate hash
-		$hash = $id ? md5($name.$id) : static::hash($closure);
+		$hash = static::hash($name, $closure, $id);
 
 		// load from storage
 		$check = static::get($hash, $endpoint);
@@ -100,10 +100,14 @@ class Catalog
 	 * Return a serialized closure.
 	 *
 	 * @param	closure	$closure
+	 * @param	string	$id
 	 * @return	string
 	 */
-	protected static function hash($closure)
+	protected static function hash($name, $closure, $id)
 	{
+		// if custom id, return that
+		if ($id) return md5(strtoupper($name.$id));
+
 		// serializer
         $serializer = new Serializer();
 
