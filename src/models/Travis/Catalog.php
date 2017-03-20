@@ -16,12 +16,13 @@ class Catalog
 	 * @param	closure	$closure
 	 * @param	string	$age_limit
 	 * @param	string	$endpoint
+	 * @param	string	$custom_hash
 	 * @return	array
 	 */
-	public static function lookup($name, $closure, $age_limit = null, $endpoint = null)
+	public static function lookup($name, $closure, $age_limit = null, $endpoint = null, $custom_hash = null)
 	{
 		// calculate hash
-		$hash = static::hash($closure);
+		$hash = $custom_hash ? $custom_hash : static::hash($closure);
 
 		// load from storage
 		$check = static::get($hash, $endpoint);
