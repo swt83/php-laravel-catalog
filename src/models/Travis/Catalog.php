@@ -42,7 +42,7 @@ class Catalog
 				if ($check->created_at < $expires_at->format('%F %X'))
 				{
 					// delete
-					static::unset($hash, $endpoint);
+					static::delete($hash, $endpoint);
 
 					// return new lookup
 					return static::run($name, $closure, $hash, $endpoint);
@@ -56,7 +56,7 @@ class Catalog
 			if (!$result)
 			{
 				// delete
-				static::unset($hash, $endpoint);
+				static::delete($hash, $endpoint);
 
 				// rerun
 				return static::run($name, $closure, $hash, $endpoint);
@@ -145,12 +145,12 @@ class Catalog
 	 * @param	string	$endpoint
 	 * @return	void
 	 */
-	public static function unset($hash, $endpoint = null)
+	public static function delete($hash, $endpoint = null)
 	{
 		// if using remote api...
 		if ($endpoint)
 		{
-			API::unset($hash, $endpoint);
+			API::delete($hash, $endpoint);
 		}
 
 		// else if using database...

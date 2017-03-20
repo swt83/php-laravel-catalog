@@ -34,8 +34,8 @@ class API
 						$message = 'Record not found.';
 					}
 					break;
-				case 'unset':
-					Catalog::unset($input->hash);
+				case 'delete':
+					Catalog::delete($input->hash);
 					break;
 				case 'set':
 					Catalog::set($input->name, $input->hash, $input->response);
@@ -81,9 +81,9 @@ class API
 	 * @param	string	$endpoint
 	 * @return	void
 	 */
-	public static function unset($hash, $endpoint)
+	public static function delete($hash, $endpoint)
 	{
-		static::request($endpoint, 'unset', ['hash' => $hash]);
+		static::request($endpoint, 'delete', ['hash' => $hash]);
 	}
 
 	/**
