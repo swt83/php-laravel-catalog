@@ -15,11 +15,11 @@ class Catalog
 	 * @param	string	$name
 	 * @param	closure	$closure
 	 * @param	string	$age_limit
-	 * @param	string	$endpoint
 	 * @param	string	$id
+	 * @param	string	$endpoint
 	 * @return	array
 	 */
-	public static function lookup($name, $closure, $age_limit = null, $endpoint = null, $id = null)
+	public static function lookup($name, $closure, $age_limit = null, $id = null, $endpoint = null)
 	{
 		// calculate hash
 		$hash = $id ? md5($name.$id) : static::hash($closure);
